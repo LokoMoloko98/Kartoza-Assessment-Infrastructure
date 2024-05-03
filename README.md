@@ -1,6 +1,6 @@
-# Terraform-Dev-EC2-maker
+# Kartoza Assessment Infrastructure
 
-This repository contains Terraform configuration files to easily provision a development environment on AWS. The setup includes the creation of a Virtual Private Cloud (VPC) with a public subnet, instance role with specific permissions, and launching an EC2 instance within the VPC. The EC2 instance is configured with user data script for various tasks including updating the VM, installing Docker, managing instance names, making Route53 changes, and deploying a Docker container.
+This repository contains Terraform configuration files to that provision and deploy Moloko Mokubedi's Kartoza technical assessment submission in an AWS Cloud environment. The setup includes the creation of a Virtual Private Cloud (VPC) with a public subnet, an IAM instance role with least-privilege permissions, and an EC2 instance launched within the VPC. The EC2 instance is configured with a user data script that does various bootstrapping tasks including updating the VM, installing Docker, managing instance name, making Route53 (DNS) changes, and deploying the web app.
 
 ## Features
 
@@ -14,27 +14,41 @@ This repository contains Terraform configuration files to easily provision a dev
     - Updates the VM and downloads Docker.
     - Names the EC2 instance.
     - Creates an A record in Route53 and links it to the instance.
-    - Clones the [Infrastructure-Testing-Nginx-Server-Container](https://github.com/LokoMoloko98/Infrastructure-Testing-Nginx-Server-Container) repository from your GitHub account.
+    - Clones the [Kartoza_Tech_Assessment](https://github.com/LokoMoloko98/Kartoza_Tech_Assessment) repository from your GitHub account.
     - Builds and runs the Docker container.
 
 ## Usage
 
 1. Clone this repository to your local machine:
-
 ```bash
-git clone https://github.com/yourusername/AWS-DevBox-Terraform.git
+git clone https://github.com/LokoMoloko98/Kartoza-Assessment-Infrastructure
 ```
+
 2. Navigate to the directory:
 ```
-cd Terraform-Dev-EC2-maker
+cd Kartoza-Assessment-Infrastructure
 ```
 
-3. terraform init
+3. Modify the backend.tf file with your AWS profile and needed S3 remote-backend configurations to integrate the IaC config with your AWS environment.
+
+### N.B: These AWS resources have to be created manually via the AWS console before provisioning the IaC stack.
+
+``` 
+terraform {
+  backend "s3" {
+    bucket         = "Provide the name of the S3 bucket name that will hold the statefile"
+    key            = "Provide the path to save the state file"
+    region         = "Provide the AWS region code where the remote bucket is located"
+    profile        = "Provide you currently logged awscli profile. Use aws access and secret keys if the awscli is not configured on your machine. THIS IS NOT RECOMMENDED. Using the awscli is best practice."
+    dynamodb_table = "Provide the name of the DynamoDB table that holds the state lock hash.
+":  }
+}
+```
+
+4. terraform init
 ```
 terraform init
 ```
-
-4. Review and modify the backend.tf file with your AWS profile and desired remote-backend configurations.
 
 5. Validate the terraform configuration files to ensure that they are free of syntax and dependency errors.
 
@@ -42,36 +56,15 @@ terraform init
 terraform validate
 ```
 
-6. Review the infrastructure to be provioned by seeing the terraform plan:
+6. Review the infrastructure to be provisioned by seeing the terraform plan:
 ```
 terraform plan
 ```
 
-7. If you are satisfied provision the infrastructure:
+7. If you are satisfied with the plan, go ahead and provision the infrastructure:
 ```
 terraform apply
 ```
-### After provisioning, access the EC2 instance to start developing/testing projects!
-
-## SSH Access with VSCode
-
-After Terraform provisions the EC2 instance, an SSH configuration file will be generated locally on your machine. Here's how you can SSH into the instance using Visual Studio Code (VSCode):
-
-1. **Wait for Terraform to Complete**: Ensure that Terraform has finished provisioning the EC2 instance before attempting to SSH into it.
-
-2. **Locate the SSH Configuration File**: The SSH configuration file will be generated in the same directory where you ran the Terraform commands. It will be named according to your host OS (e.g., `windows-ssh-config` for Windows or `linux-ssh-config` for Linux).
-
-3. **Open VSCode**: Launch Visual Studio Code on your machine.
-
-4. **Open the Command Palette**: Press `Ctrl + Shift + P` (Windows/Linux) or `Cmd + Shift + P` (macOS) to open the command palette.
-
-5. **Search for Remote-SSH**: In the command palette, start typing "Remote-SSH" and select "Remote-SSH: Connect to Host..." from the dropdown list.
-
-6. **Choose the configured SSH host**: Another dropdown list with configured hosts will appear. The public IP of the host that was just provisioned will be in that list select it.
-
-7. **Connect to Host**: VSCode will attempt to connect to the EC2 instance using the SSH configuration provided in the selected file. If successful, it will open a new VSCode window with a SSH session to the EC2 instance.
-
-Once the SSH connection is established, you can use VSCode's integrated terminal or remote features to interact with the EC2 instance as if you were logged in directly. This allows for seamless development and debugging directly on the remote server.
 
 ### **Troubleshooting Connection Issues**: 
 If the connection is not successful, you may need to modify the security group associated with the EC2 instance to allow SSH access. Ensure that port 22 is open for inbound traffic from your IP address. Additionally, double-check the SSH configuration file generated by Terraform to ensure that the correct hostname, user, and identity file are specified.
