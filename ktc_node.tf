@@ -3,7 +3,7 @@ data "template_file" "user_data" {
   vars = {
     project  = var.project_name
     domain_name = var.domain_name
-    hostzone = var.hostzone
+    hosted_zone_id = var.hosted_zone_id
   }
 }
 

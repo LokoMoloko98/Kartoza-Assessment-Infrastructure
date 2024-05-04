@@ -33,7 +33,7 @@ variable "instance_type" {
 variable "ami_id" {
   description = "The AMI to use"
   type        = string
-  default     = "ami-0ddda618e961f2270"
+  default     = "ami-07caf09b362be10b8" 
 }
 
 #security-group variable
@@ -48,7 +48,7 @@ variable "host_os" {
   default = "linux"
 }
 
-variable "hostzone" {
+variable "hosted_zone_id" {
   type = string
 }
 
@@ -58,5 +58,5 @@ variable "domain_name" {
 
 variable "key" {
   type = string
-  default = "spacelift"
+  default = "kartoza"
 }
