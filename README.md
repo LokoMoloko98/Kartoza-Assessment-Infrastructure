@@ -45,7 +45,7 @@ terraform {
 }
 ```
 
-### 4. Initialize the connection between the Terraform config and your AWS account by running this command.
+### 4. Initialize the backend for state management of your Terraform config and dounload the AWS provider plugin by running this command.
 ```
 terraform init
 ```
