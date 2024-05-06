@@ -4,8 +4,8 @@ project_name = ""
 aws_profile  = ""
 
 #VPC vars
-vpc_cidr               = "x.x.x.x/16"
-public_subnet_az1_cidr = "x.x.x.x/24"
+vpc_cidr               = ""
+public_subnet_az1_cidr = ""
 
 #ec2 server variables
 instance_type    = ""
