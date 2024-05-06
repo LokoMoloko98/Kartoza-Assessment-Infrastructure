@@ -7,6 +7,9 @@ resource "aws_security_group" "security_group" {
     Name = "${var.project_name}-sg"
   }
 }
+data "external" "myipaddr" {
+  program = ["bash", "-c", "curl -s 'https://api.ipify.org?format=json'"]
+}
 
 # create ingress rules
 resource "aws_vpc_security_group_ingress_rule" "https_ingress" {
@@ -36,7 +39,7 @@ resource "aws_vpc_security_group_ingress_rule" "http_ingress" {
 resource "aws_vpc_security_group_ingress_rule" "ssh_ingress" {
   security_group_id = aws_security_group.security_group.id
   description       = "Secure Shell (SSH)"
-  cidr_ipv4         = var.ssh_location
+  cidr_ipv4         = "${data.external.myipaddr.result.ip}/32"
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
@@ -49,7 +52,7 @@ resource "aws_vpc_security_group_ingress_rule" "ssh_ingress" {
 resource "aws_vpc_security_group_ingress_rule" "traefik__dashboard_ingress" {
   security_group_id = aws_security_group.security_group.id
   description       = "traefik-dashboard"
-  cidr_ipv4         = var.ssh_location
+  cidr_ipv4         = "${data.external.myipaddr.result.ip}/32"
   from_port         = 8080
   ip_protocol       = "tcp"
   to_port           = 8080

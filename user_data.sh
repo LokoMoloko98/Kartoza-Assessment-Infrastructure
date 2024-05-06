@@ -22,8 +22,8 @@ aws ec2 create-tags --resources $INSTANCE_ID --tags Key=Name,Value="$NEW_NAME_TA
 
 DOMAIN_NAME="${domain_name}"
 LOWERCASE_TENANT_ID="${project}"
-RECORD_NAME="$LOWERCASE_TENANT_ID.$DOMAIN_NAME."
-HOSTED_ZONE_ID=${hostzone} # replace with your Route53 Hosted Zone ID
+RECORD_NAME="$LOWERCASE_TENANT_ID.$DOMAIN_NAME"
+HOSTED_ZONE_ID=${hosted_zone_id} # replace with your Route53 Hosted Zone ID
 TTL=300 # time to live for the record in seconds
 
 
@@ -60,8 +60,19 @@ EOM
     aws route53 change-resource-record-sets --hosted-zone-id $HOSTED_ZONE_ID --change-batch "$JSON"
 fi
 
-
 cd /
 git clone https://github.com/LokoMoloko98/Kartoza_Tech_Assessment.git
 cd /Kartoza_Tech_Assessment
-docker-compose up -d
+echo "fqdn=$RECORD_NAME" > .env
+docker-compose --env-file .env up -d
+
+curl -X POST \
+  -H 'Content-Type: application/json' \
+  -d '{
+        "@type": "MessageCard",
+        "@context": "http://schema.org/extensions",
+        "themeColor": "0072C6",
+        "title": "The  ${project} EC2 User Data Script Execution Is Finished",
+        "text": "Access the web app at https://${project}.${domain_name}"
+      }' \
+  ${ms_teams_webhook}
