@@ -22,14 +22,19 @@ variable "public_subnet_az1_cidr" {
 }
 
 variable "instance_type" {
-  description = "The  EC2 instance type to provision"
+  description = "The EC2 instance type to provision. Use an x86 based instance type to avoid Docker Build issues. Avoid Gravitron/ARM instances"
   type    = string
 }
 
 variable "ami_id" {
-  description = "The ID of the AMI to use. AMI IDs are region specific"
+  description = "The ID of the AMI to use. AMI IDs are region specific. It is recommended to Use the Amazon Linux 2023, or any Fedora/RHEL based Linux distro"
   type        = string
 }
+
+# The Route53 registered domain name and associated Route53 Hosted Zone ID that 
+# you would like to serve the web app from are very important for the 
+# Traefik reverse proxy to identify the fqdn to register 
+# a LetsEncrypt SSL certificate for. 
 
 variable "hosted_zone_id" {
   description = "The hosted zone where the Domain is managed in Route 53"
