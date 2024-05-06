@@ -1,5 +1,5 @@
 #Create an IAM role
-resource "aws_iam_role" "ktc_node_EC2_role" {
+resource "aws_iam_role" "assessment_node_EC2_role" {
   name = "${var.project_name}-iam-role"
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
@@ -23,31 +23,31 @@ resource "aws_iam_role" "ktc_node_EC2_role" {
 
 #EC2 policy
 resource "aws_iam_role_policy_attachment" "ec2-role-attachment" {
-  role      = aws_iam_role.ktc_node_EC2_role.name
+  role      = aws_iam_role.assessment_node_EC2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
 
 #SSM policy 1
 resource "aws_iam_role_policy_attachment" "SSM-role-attachment" {
-  role      = aws_iam_role.ktc_node_EC2_role.name
+  role      = aws_iam_role.assessment_node_EC2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 #SSM policy 2
 resource "aws_iam_role_policy_attachment" "SSM-EC2-role-attachment" {
-  role      = aws_iam_role.ktc_node_EC2_role.name
+  role      = aws_iam_role.assessment_node_EC2_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
 #Route53 policy
 resource "aws_iam_role_policy_attachment" "route53-role-attachment" {
-  role      = aws_iam_role.ktc_node_EC2_role.name
+  role      = aws_iam_role.assessment_node_EC2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonRoute53FullAccess"
 }
 
 
 #Attach role to an instance profile
 resource "aws_iam_instance_profile" "ec2_profile" {
-  name = "ec2_profile"
-  role = aws_iam_role.ktc_node_EC2_role.name
+  name = "${var.project_name}-ec2-profile"
+  role = aws_iam_role.assessment_node_EC2_role.name
 }

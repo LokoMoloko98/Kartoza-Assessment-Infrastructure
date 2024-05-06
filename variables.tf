@@ -2,61 +2,56 @@
 variable "region" {
   description = "region to create resources"
   type        = string
-  default     = "us-east-1"
 }
 
 variable "project_name" {
   description = "project name"
   type        = string
-  default     = "KTC"
 }
 
 #VPC variable
 variable "vpc_cidr" {
-  description = "VPC CIDR block"
+  description = "IPv4 VPC CIDR block"
   type        = string
-  default     = "172.31.0.0/16"
 }
 
 #public subnet availabilty zone 1 cidr variable
 variable "public_subnet_az1_cidr" {
-  description = "public subnet availabilty zone one cidr"
+  description = "IPv4 CIDR block for the public subnet in availabilty zone one"
   type        = string
-  default     = "172.31.1.0/24"
 }
 
 variable "instance_type" {
+  description = "The  EC2 instance type to provision"
   type    = string
-  default = "t2.micro"
 }
 
 variable "ami_id" {
-  description = "The AMI to use"
+  description = "The ID of the AMI to use. AMI IDs are region specific"
   type        = string
-  default     = "ami-07caf09b362be10b8" 
-}
-
-#security-group variable
-variable "ssh_location" {
-  description = "ip address that can ssh into the server, it should be manually changed after provisioning"
-  type        = string
-  default     = "41.216.203.213/32"
-}
-
-variable "host_os" {
-  type    = string
-  default = "linux"
 }
 
 variable "hosted_zone_id" {
+  description = "The hosted zone where the Domain is managed in Route 53"
   type = string
 }
 
 variable "domain_name" {
+   description = "The Route53 Registered Domain"
   type = string
 }
 
-variable "key" {
+variable "ssh_key" {
+  description = "The ssh key to connect to the EC2 server hosting the solution with. This ssh key must exist in the account and region that this stack will be provisioned to beforehand"
   type = string
-  default = "kartoza"
+}
+
+variable "aws_profile" {
+  description = "The awscli profile that has the credentials to connect to the account that this stack will be provisioned to"
+  type = string
+}
+
+variable "ms_teams_webhook" {
+  description = "Optional. An MS Teams webhoot to notify you when the User Data script has deployed the web app on the EC2 server"
+  type = string
 }
