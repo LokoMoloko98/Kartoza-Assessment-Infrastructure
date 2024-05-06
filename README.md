@@ -31,6 +31,7 @@ These AWS resources have to be created/configured manually via the AWS console (
    - **A DynamoDB table with the string ```LockID``` as the Primary Key.**
    - **An SSH key in OpenSSH format ```(.pem)``` in the EC2 console.**
    - **The SSM Manage Instance role enabled and activated**
+   - **An Route53 managed domain**
 
 ## Assumptions
 - The machine that will provision this Terraform stack has installed on it least a version of Terraform from 1.4*.*
