@@ -30,7 +30,7 @@ These AWS resources have to be created/configured manually via the AWS console (
    - **A configured ```awscli``` profile on the machine that will provision the stack.**
    - **A DynamoDB table with the string ```LockID``` as the Primary Key.**
    - **An SSH key in OpenSSH format ```(.pem)``` in the EC2 console.**
-   - **The SSM Manage Instance role enabled and activated**
+   - **(Optional) Thee SSM Manage Instance role enabled and activated**
    - **An Route53 managed domain**
 
 ## Assumptions
